@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -22,7 +23,7 @@ type Req struct {
 	Url     string              `json:"url"`
 	Method  string              `json:"method"`
 	Headers map[string][]string `json:"headers"`
-	Body    string              `json:"body"`
+	Body    json.RawMessage     `json:"body"`
 }
 
 type Execution struct {
@@ -80,7 +81,10 @@ func main() {
 
 	statuses := map[int]int{}
 	errorList := []error{}
+	totalResponses := len(client.responses)
+	timeAccumulation := time.Duration(0)
 	for i := range client.responses {
+		timeAccumulation += client.responses[i].elapsed
 		if client.responses[i].res == nil {
 			errorList = append(errorList, client.responses[i].err)
 			continue
@@ -96,6 +100,7 @@ func main() {
 
 	fmt.Printf("Total requests: %v\n", len(client.responses))
 	fmt.Printf("Total errors: %v\n", len(errorList))
+	fmt.Printf("Average response time: %v\n", time.Duration(totalResponses/int(timeAccumulation)).Seconds())
 	w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
 	fisrtRow, secondRow := "status: \t", "quantity: \t"
 	for status, n := range statuses {
@@ -131,7 +136,7 @@ func (c *Client) do(r *http.Request) *Res {
 
 func (c *Client) action(i interface{}) interface{} {
 	req := i.(*Req)
-	r, err := http.NewRequest(req.Method, req.Url, strings.NewReader(req.Body))
+	r, err := http.NewRequest(req.Method, req.Url, bytes.NewReader(req.Body))
 	if err != nil {
 		return err
 	}
