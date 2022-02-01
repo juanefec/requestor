@@ -83,8 +83,15 @@ func main() {
 	errorList := []error{}
 	totalResponses := len(client.responses)
 	timeAccumulation := time.Duration(0)
+	maxElapsed, minElapsed := time.Duration(0), time.Minute
 	for i := range client.responses {
-		timeAccumulation += client.responses[i].elapsed
+		if client.responses[i].elapsed < minElapsed {
+			minElapsed = client.responses[i].elapsed
+		}
+		if client.responses[i].elapsed > maxElapsed {
+			maxElapsed = client.responses[i].elapsed
+		}
+		timeAccumulation = timeAccumulation + client.responses[i].elapsed
 		if client.responses[i].res == nil {
 			errorList = append(errorList, client.responses[i].err)
 			continue
@@ -100,7 +107,9 @@ func main() {
 
 	fmt.Printf("Total requests: %v\n", len(client.responses))
 	fmt.Printf("Total errors: %v\n", len(errorList))
-	fmt.Printf("Average response time: %v\n", time.Duration(totalResponses/int(timeAccumulation)).Seconds())
+	fmt.Printf("Average response time: %v\n", time.Duration(int(timeAccumulation)/totalResponses))
+	fmt.Printf("Max response time: %v\n", maxElapsed)
+	fmt.Printf("Min response time: %v\n", minElapsed)
 	w := tabwriter.NewWriter(os.Stdout, 1, 1, 1, ' ', 0)
 	fisrtRow, secondRow := "status: \t", "quantity: \t"
 	for status, n := range statuses {
