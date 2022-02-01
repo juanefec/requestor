@@ -27,7 +27,7 @@ type Req struct {
 }
 
 type Execution struct {
-	RPS      int `json:"rps"`
+	RPM      int `json:"rpm"`
 	Duration int `json:"duration"`
 	Fire     func(interface{})
 	Kill     func()
@@ -68,9 +68,12 @@ func main() {
 	for _, step := range config.Steps {
 		reqexe := strings.Split(step, "/")
 		req, exe := client.Reqs[reqexe[0]], client.Executions[reqexe[1]]
+		fmt.Printf("Start step %v\n----", step)
 		execs.TimedLoop(execs.Repeat(func(i int) {
 			exe.Fire(req)
-		}, time.Second/time.Duration(exe.RPS)), time.Duration(exe.Duration)*time.Second)
+			fmt.Printf("\rFired request #%v: %v", i, reqexe[0])
+		}, time.Minute/time.Duration(exe.RPM)), time.Duration(exe.Duration)*time.Second)
+		fmt.Print("\n")
 	}
 
 	for i, _ := range client.Executions {
