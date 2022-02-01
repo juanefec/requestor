@@ -1,0 +1,28 @@
+{
+	"reqs": {
+		"POST_lmao":{
+			"url":"http://localhost:8090/lmao",
+			"method": "POST"
+		}
+	},
+	"executions": {
+		"fast_second": {
+			"rps": 50,
+			"duration": 1
+		},
+		"slow_second": {
+			"rps": 5,
+			"duration": 1
+		},
+		"medium_second": {
+			"rps": 20,
+			"duration": 1
+		}
+	},
+	"steps": [
+		"POST_lmao/slow_second",
+		"POST_lmao/medium_second",
+		"POST_lmao/fast_second",
+		"POST_lmao/slow_second"
+	]
+}
