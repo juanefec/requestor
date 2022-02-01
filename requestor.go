@@ -9,7 +9,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/juanefec/requestor/execs"
+	"github.com/juanefec/execs"
 )
 
 type Config struct {
