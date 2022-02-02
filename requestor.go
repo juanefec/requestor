@@ -68,10 +68,10 @@ func main() {
 	for _, step := range config.Steps {
 		reqexe := strings.Split(step, "/")
 		req, exe := client.Reqs[reqexe[0]], client.Executions[reqexe[1]]
-		fmt.Printf("Start step %v\n----", step)
+		fmt.Printf("Start step %v\n----\n", step)
 		execs.TimedLoop(execs.Repeat(func(i int) {
 			exe.Fire(req)
-			fmt.Printf("\rFired request #%v: %v", i, reqexe[0])
+			fmt.Printf("\rFired request #%v: %v", i+1, reqexe[0])
 		}, time.Minute/time.Duration(exe.RPM)), time.Duration(exe.Duration)*time.Second)
 		fmt.Print("\n")
 	}
