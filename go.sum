@@ -1,2 +1,4 @@
 github.com/juanefec/execs v0.0.0-20220201201756-7a067ae969e3 h1:Sn3g4JOcFa5ALJnVZkQIgif663rVTx/+3lQFgqtNmrM=
 github.com/juanefec/execs v0.0.0-20220201201756-7a067ae969e3/go.mod h1:KmSIuXu/NiRyc/astLy4sDVTwtnf0YiPA8DRHTmFSoM=
+github.com/juanefec/execs v0.0.0-20220202040038-73ec2b418a2a h1:cPAhfTYzfVozaOSpAZ1zZPRV3UXuqGpvYQn8Ul2+vnA=
+github.com/juanefec/execs v0.0.0-20220202040038-73ec2b418a2a/go.mod h1:KmSIuXu/NiRyc/astLy4sDVTwtnf0YiPA8DRHTmFSoM=
